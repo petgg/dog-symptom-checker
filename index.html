@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>うちの子症状チェック | 動物病院に行く前の整理ノート</title>
+<meta name="description" content="愛犬の症状を整理して、動物病院でスムーズに相談するためのチェックリストツール。獣医師にかかる前の症状整理にお使いください。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6ef;
+    --bg-card: #fffdf8;
+    --ink: #2a2118;
+    --ink-soft: #5c4f42;
+    --ink-mute: #8b7e6f;
+    --line: #e8dec8;
+    --line-soft: #f0e9d8;
+    --calm: #5b8a86;
+    --calm-soft: #e8efee;
+    --warn: #c4853c;
+    --warn-soft: #f8ecd5;
+    --danger: #b8463a;
+    --danger-soft: #f5dcd6;
+    --shadow: 0 1px 2px rgba(60, 40, 20, 0.04), 0 8px 32px rgba(60, 40, 20, 0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(91, 138, 134, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(196, 133, 60, 0.04) 0%, transparent 40%);
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--calm);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Important notice */
+  .notice {
+    background: var(--warn-soft);
+    border-left: 3px solid var(--warn);
+    padding: 16px 20px;
+    margin-bottom: 36px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .notice strong { color: var(--ink); }
+
+  /* Section */
+  section {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .section-num {
+    display: inline-block;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--calm);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.01em;
+  }
+  .section-desc {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  /* Form */
+  .field {
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  select, input[type="number"] {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--ink);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  select:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: var(--calm);
+    background: var(--bg-card);
+  }
+  .weight-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.6;
+    min-height: 16px;
+  }
+  .weight-hint.warn { color: var(--warn); font-weight: 500; }
+  .weight-hint.alert { color: var(--danger); font-weight: 500; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+  }
+
+  /* Symptoms */
+  .symptom-cat {
+    margin-bottom: 24px;
+  }
+  .symptom-cat-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .symptom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media (max-width: 480px) {
+    .symptom-grid { grid-template-columns: 1fr; }
+  }
+  .sym {
+    position: relative;
+  }
+  .sym input { position: absolute; opacity: 0; pointer-events: none; }
+  .sym label {
+    display: block;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: 0;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .sym label:hover {
+    border-color: var(--calm);
+    background: var(--bg-card);
+  }
+  .sym input:checked + label {
+    background: #2a2118;
+    border-color: #2a2118;
+    color: #faf6ef;
+  }
+  .sym.emergency input:checked + label {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  .sym.urgent input:checked + label {
+    background: var(--warn);
+    border-color: var(--warn);
+  }
+  .sym .tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    vertical-align: middle;
+  }
+  .sym.emergency .tag { background: var(--danger-soft); color: var(--danger); }
+  .sym.urgent .tag { background: var(--warn-soft); color: var(--warn); }
+  .sym input:checked + label .tag {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* Submit */
+  .actions {
+    text-align: center;
+    margin-top: 32px;
+  }
+  .btn {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 14px 36px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-decoration: none;
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(42, 33, 24, 0.2);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 10px 22px;
+    font-size: 13px;
+    margin-left: 8px;
+  }
+
+  /* Result */
+  #result { display: none; }
+  #result.show { display: block; }
+  .urgency {
+    text-align: center;
+    padding: 28px 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  }
+  .urgency.emergency {
+    background: var(--danger-soft);
+    border: 2px solid var(--danger);
+  }
+  .urgency.urgent {
+    background: var(--warn-soft);
+    border: 2px solid var(--warn);
+  }
+  .urgency.routine {
+    background: #eef3ed;
+    border: 2px solid var(--calm);
+  }
+  .urgency-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .urgency-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .urgency.emergency .urgency-title { color: var(--danger); }
+  .urgency.urgent .urgency-title { color: var(--warn); }
+  .urgency.routine .urgency-title { color: var(--calm); }
+  .urgency-desc { font-size: 14px; line-height: 1.7; }
+
+  .result-block {
+    margin-bottom: 28px;
+  }
+  .result-block h3 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 17px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .result-block ul {
+    list-style: none;
+    padding: 0;
+  }
+  .result-block li {
+    padding: 8px 0 8px 22px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .result-block li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 16px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--calm);
+  }
+  .breed-warning {
+    background: var(--warn-soft);
+    border-left: 3px solid var(--warn);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .breed-warning strong { color: var(--ink); }
+
+  .checklist {
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+  .checklist-item {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .checklist-item::before {
+    content: "□ ";
+    color: var(--ink-mute);
+    margin-right: 4px;
+  }
+
+  .final-disclaimer {
+    margin-top: 32px;
+    padding: 24px;
+    background: var(--danger-soft);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--danger);
+  }
+  .final-disclaimer h3 {
+    font-family: 'Noto Serif JP', serif;
+    color: var(--danger);
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+  .final-disclaimer p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.8;
+  }
+  footer a { color: var(--calm); text-decoration: none; }
+
+  /* Animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  #result.show > * {
+    animation: fadeUp 0.4s ease-out backwards;
+  }
+  #result.show > *:nth-child(1) { animation-delay: 0s; }
+  #result.show > *:nth-child(2) { animation-delay: 0.08s; }
+  #result.show > *:nth-child(3) { animation-delay: 0.16s; }
+  #result.show > *:nth-child(4) { animation-delay: 0.24s; }
+  #result.show > *:nth-child(5) { animation-delay: 0.32s; }
+
+  .hide { display: none !important; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="eyebrow">Symptom Triage Tool</div>
+    <h1>うちの子の症状チェック</h1>
+    <p class="subtitle">動物病院に行く前に、症状を整理するためのノートです。<br>診断するためのものではありません。</p>
+  </header>
+
+  <div class="notice">
+    <strong>このツールについて：</strong>
+    このツールは獣医師による診断の代わりにはなりません。症状の組み合わせから「動物病院で相談する際の話の整理」を目的としています。気になる症状があれば、必ず獣医師にご相談ください。
+  </div>
+
+  <!-- Step 1: 基本情報 -->
+  <section id="step1">
+    <div class="section-num">STEP 01</div>
+    <h2>うちの子の情報</h2>
+    <p class="section-desc">犬種や年齢によって、注意すべき病気は変わります。</p>
+
+    <div class="field">
+      <label for="breedCategory">サイズ・分類</label>
+      <select id="breedCategory">
+        <option value="">選んでください</option>
+        <option value="small">小型犬</option>
+        <option value="medium">中型犬</option>
+        <option value="large">大型犬</option>
+        <option value="brachy">短頭種(パグ・ブルドッグ系)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="breed">犬種(任意)</label>
+      <select id="breed">
+        <option value="">先にサイズを選んでください</option>
+      </select>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="age">年齢(歳)</label>
+        <input type="number" id="age" min="0" max="25" placeholder="例: 5">
+      </div>
+      <div class="field">
+        <label for="weight">体重(kg・任意)</label>
+        <input type="number" id="weight" min="0" max="100" step="0.1" placeholder="例: 3.5">
+        <div id="weightHint" class="weight-hint"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 2: 症状 -->
+  <section id="step2">
+    <div class="section-num">STEP 02</div>
+    <h2>気になる症状</h2>
+    <p class="section-desc">当てはまるものをすべて選んでください。<span style="color: var(--danger); font-weight:500;">赤タグ</span>は緊急度が高い症状です。</p>
+
+    <!-- 緊急サイン -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">緊急のサイン</div>
+      <div class="symptom-grid" id="catEmergency"></div>
+    </div>
+
+    <!-- 消化器系 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">消化器系</div>
+      <div class="symptom-grid" id="catDigestive"></div>
+    </div>
+
+    <!-- 呼吸器系 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">呼吸器系</div>
+      <div class="symptom-grid" id="catRespiratory"></div>
+    </div>
+
+    <!-- 全身・行動 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">全身・行動の変化</div>
+      <div class="symptom-grid" id="catGeneral"></div>
+    </div>
+
+    <!-- 皮膚・被毛 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">皮膚・被毛</div>
+      <div class="symptom-grid" id="catSkin"></div>
+    </div>
+
+    <!-- 目・耳・口 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">目・耳・口</div>
+      <div class="symptom-grid" id="catEyes"></div>
+    </div>
+
+    <!-- 排泄 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">排泄(おしっこ・うんち)</div>
+      <div class="symptom-grid" id="catUrinary"></div>
+    </div>
+
+    <!-- 整形 -->
+    <div class="symptom-cat">
+      <div class="symptom-cat-title">足・歩行</div>
+      <div class="symptom-grid" id="catLimb"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="checkSymptoms()">症状を整理する</button>
+      <button class="btn btn-secondary" onclick="resetAll()">リセット</button>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section id="result">
+    <div class="section-num">RESULT</div>
+    <h2>症状の整理結果</h2>
+    <div id="urgencyArea"></div>
+    <div id="categoryArea"></div>
+    <div id="breedArea"></div>
+    <div class="result-block">
+      <h3>動物病院に行くときに伝えること</h3>
+      <div class="checklist">
+        <div class="checklist-item">いつから症状が始まったか</div>
+        <div class="checklist-item">症状の頻度・回数</div>
+        <div class="checklist-item">食事・水分摂取の変化</div>
+        <div class="checklist-item">最後の排便・排尿の様子</div>
+        <div class="checklist-item">体重の変化</div>
+        <div class="checklist-item">投薬中の薬・サプリメント</div>
+        <div class="checklist-item">最近の環境変化(引越し、新しい食事、来客等)</div>
+        <div class="checklist-item">誤飲・誤食の可能性</div>
+        <div class="checklist-item">嘔吐物・便の写真(可能なら)</div>
+      </div>
+    </div>
+    <div class="final-disclaimer">
+      <h3>最後に大切なこと</h3>
+      <p>このツールは情報整理のためのものです。<br>診断・治療の判断は必ず獣医師にお任せください。<br>症状が悪化した場合や少しでも不安があれば、ためらわず動物病院に連絡しましょう。</p>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="resetAll()">最初からやり直す</button>
+    </div>
+  </section>
+
+  <footer>
+    本ツールは情報提供のみを目的としており、獣医療行為ではありません。<br>
+    緊急時は最寄りの動物病院・夜間救急動物病院にご連絡ください。<br>
+    <br>
+    © うちの子症状チェック
+  </footer>
+</div>
+
+<script>
+// ===== 犬種データ =====
+const breedsByCategory = {
+  small: ['チワワ', 'トイプードル', 'ポメラニアン', 'ヨークシャーテリア', 'マルチーズ', 'パピヨン', 'ミニチュアダックスフンド', 'シーズー', 'ミニチュアシュナウザー', 'ジャックラッセル', 'ペキニーズ', 'カバリエ', 'その他小型犬'],
+  medium: ['柴犬', 'コーギー', 'ビーグル', 'ボーダーコリー', 'コッカースパニエル', 'ウィペット', '日本スピッツ', 'バセットハウンド', 'シェルティ', 'その他中型犬'],
+  large: ['ゴールデンレトリバー', 'ラブラドールレトリバー', 'ジャーマンシェパード', 'シベリアンハスキー', 'ドーベルマン', 'バーニーズマウンテンドッグ', 'グレートデーン', 'セントバーナード', 'ロットワイラー', 'ボクサー', 'その他大型犬'],
+  brachy: ['パグ', 'フレンチブルドッグ', 'ブルドッグ', 'ボストンテリア', 'シーズー', 'ペキニーズ', 'ボクサー']
+};
+
+// ===== 犬種別 標準体重(kg) =====
+// 一般的な目安。個体差が大きいため、あくまで参考値です。
+const breedWeightRange = {
+  // 小型犬
+  'チワワ': [1.5, 3.0],
+  'トイプードル': [2.0, 4.0],
+  'ポメラニアン': [1.8, 3.5],
+  'ヨークシャーテリア': [2.0, 3.2],
+  'マルチーズ': [2.0, 3.5],
+  'パピヨン': [3.0, 5.0],
+  'ミニチュアダックスフンド': [4.0, 5.0],
+  'シーズー': [4.0, 7.0],
+  'ミニチュアシュナウザー': [5.0, 8.0],
+  'ジャックラッセル': [5.0, 8.0],
+  'ペキニーズ': [3.0, 6.0],
+  'カバリエ': [5.0, 8.0],
+  // 中型犬
+  '柴犬': [8.0, 11.0],
+  'コーギー': [10.0, 13.0],
+  'ビーグル': [9.0, 14.0],
+  'ボーダーコリー': [14.0, 22.0],
+  'コッカースパニエル': [12.0, 15.0],
+  'ウィペット': [11.0, 13.0],
+  '日本スピッツ': [5.0, 9.0],
+  'バセットハウンド': [20.0, 30.0],
+  'シェルティ': [6.0, 12.0],
+  // 大型犬
+  'ゴールデンレトリバー': [25.0, 34.0],
+  'ラブラドールレトリバー': [25.0, 36.0],
+  'ジャーマンシェパード': [22.0, 40.0],
+  'シベリアンハスキー': [16.0, 27.0],
+  'ドーベルマン': [32.0, 45.0],
+  'バーニーズマウンテンドッグ': [36.0, 52.0],
+  'グレートデーン': [45.0, 90.0],
+  'セントバーナード': [64.0, 82.0],
+  'ロットワイラー': [35.0, 60.0],
+  'ボクサー': [25.0, 32.0],
+  // 短頭種
+  'パグ': [6.0, 9.0],
+  'フレンチブルドッグ': [8.0, 14.0],
+  'ブルドッグ': [18.0, 25.0],
+  'ボストンテリア': [4.5, 11.0]
+};
+
+// カテゴリごとのざっくり目安(犬種未指定時)
+const categoryWeightRange = {
+  small: [1, 10],
+  medium: [10, 25],
+  large: [25, 90],
+  brachy: [4, 25]
+};
+
+// ===== 症状データ =====
+// level: emergency=今すぐ救急 / urgent=24h以内に受診 / routine=経過観察可
+const symptomsData = {
+  emergency: [
+    {id: 'e1', label: '意識がない・反応が薄い', level: 'emergency', system: 'general'},
+    {id: 'e2', label: 'けいれん・発作を起こした', level: 'emergency', system: 'neuro'},
+    {id: 'e3', label: '呼吸が異常に苦しそう', level: 'emergency', system: 'respiratory'},
+    {id: 'e4', label: '大量の出血がある', level: 'emergency', system: 'general'},
+    {id: 'e5', label: 'お腹が異常に膨れている', level: 'emergency', system: 'digestive'},
+    {id: 'e6', label: '歯茎が白い・紫っぽい', level: 'emergency', system: 'circulatory'},
+    {id: 'e7', label: 'おしっこが全く出ない(12h以上)', level: 'emergency', system: 'urinary'},
+    {id: 'e8', label: '熱中症の疑い(夏場ぐったり)', level: 'emergency', system: 'general'},
+    {id: 'e9', label: '中毒物質(チョコ・玉ねぎ等)を食べた', level: 'emergency', system: 'digestive'}
+  ],
+  digestive: [
+    {id: 'd1', label: '一度だけ嘔吐した', level: 'routine', system: 'digestive'},
+    {id: 'd2', label: '繰り返し嘔吐している(1日3回以上)', level: 'urgent', system: 'digestive'},
+    {id: 'd3', label: '軟便・下痢', level: 'routine', system: 'digestive'},
+    {id: 'd4', label: '血便・タール状の便', level: 'urgent', system: 'digestive'},
+    {id: 'd5', label: '食欲がない(数時間)', level: 'routine', system: 'digestive'},
+    {id: 'd6', label: '24時間以上食事をしない', level: 'urgent', system: 'digestive'},
+    {id: 'd7', label: 'よだれが異常に多い', level: 'urgent', system: 'digestive'},
+    {id: 'd8', label: '吐きたそうにするが何も出ない', level: 'urgent', system: 'digestive'}
+  ],
+  respiratory: [
+    {id: 'r1', label: 'くしゃみ', level: 'routine', system: 'respiratory'},
+    {id: 'r2', label: '鼻水', level: 'routine', system: 'respiratory'},
+    {id: 'r3', label: '咳が出る', level: 'routine', system: 'respiratory'},
+    {id: 'r4', label: 'ゼーゼー・ヒューヒュー音がする', level: 'urgent', system: 'respiratory'},
+    {id: 'r5', label: '口を開けて呼吸している(犬)', level: 'urgent', system: 'respiratory'}
+  ],
+  general: [
+    {id: 'g1', label: '元気がない・寝てばかり', level: 'routine', system: 'general'},
+    {id: 'g2', label: '震えている', level: 'routine', system: 'general'},
+    {id: 'g3', label: '体重が減ってきた', level: 'routine', system: 'general'},
+    {id: 'g4', label: '体重が増えてきた', level: 'routine', system: 'general'},
+    {id: 'g5', label: '皮膚や白目が黄色い', level: 'urgent', system: 'liver'},
+    {id: 'g6', label: '体に触ると痛がる', level: 'urgent', system: 'general'}
+  ],
+  skin: [
+    {id: 's1', label: '体を頻繁に痒がる・舐める', level: 'routine', system: 'skin'},
+    {id: 's2', label: '脱毛している', level: 'routine', system: 'skin'},
+    {id: 's3', label: '皮膚が赤い・湿疹がある', level: 'routine', system: 'skin'},
+    {id: 's4', label: 'しこりやイボがある', level: 'routine', system: 'skin'},
+    {id: 's5', label: '皮膚から悪臭がする', level: 'routine', system: 'skin'}
+  ],
+  eyes: [
+    {id: 'y1', label: '目やにが多い', level: 'routine', system: 'eyes'},
+    {id: 'y2', label: '目が真っ赤・痛がる', level: 'urgent', system: 'eyes'},
+    {id: 'y3', label: '耳を頻繁に掻く・振る', level: 'routine', system: 'ears'},
+    {id: 'y4', label: '耳から悪臭・分泌物', level: 'routine', system: 'ears'},
+    {id: 'y5', label: '口臭が強い', level: 'routine', system: 'dental'},
+    {id: 'y6', label: '歯茎が赤く腫れている', level: 'routine', system: 'dental'}
+  ],
+  urinary: [
+    {id: 'u1', label: '水を異常に飲む', level: 'routine', system: 'endocrine'},
+    {id: 'u2', label: 'おしっこの量が多い', level: 'routine', system: 'endocrine'},
+    {id: 'u3', label: 'おしっこの量が少ない', level: 'urgent', system: 'urinary'},
+    {id: 'u4', label: 'おしっこをするときに鳴く・痛がる', level: 'urgent', system: 'urinary'},
+    {id: 'u5', label: '血尿が出ている', level: 'urgent', system: 'urinary'},
+    {id: 'u6', label: '便秘が続いている', level: 'routine', system: 'digestive'}
+  ],
+  limb: [
+    {id: 'l1', label: '足を引きずる・庇う', level: 'routine', system: 'orthopedic'},
+    {id: 'l2', label: '立ち上がりにくい', level: 'routine', system: 'orthopedic'},
+    {id: 'l3', label: '階段を嫌がる', level: 'routine', system: 'orthopedic'},
+    {id: 'l4', label: '突然足が動かなくなった', level: 'emergency', system: 'neuro'}
+  ]
+};
+
+// ===== レンダリング =====
+function renderSymptoms() {
+  const groupMap = {
+    catEmergency: 'emergency',
+    catDigestive: 'digestive',
+    catRespiratory: 'respiratory',
+    catGeneral: 'general',
+    catSkin: 'skin',
+    catEyes: 'eyes',
+    catUrinary: 'urinary',
+    catLimb: 'limb'
+  };
+  for (const [containerId, key] of Object.entries(groupMap)) {
+    const container = document.getElementById(containerId);
+    const items = symptomsData[key];
+    container.innerHTML = items.map(s => {
+      const tag = s.level === 'emergency' ? '<span class="tag">緊急</span>' :
+                  s.level === 'urgent' ? '<span class="tag">早めに</span>' : '';
+      const cls = s.level === 'emergency' ? 'sym emergency' :
+                  s.level === 'urgent' ? 'sym urgent' : 'sym';
+      return `
+        <div class="${cls}">
+          <input type="checkbox" id="${s.id}" data-level="${s.level}" data-system="${s.system}" data-label="${s.label}">
+          <label for="${s.id}">${s.label}${tag}</label>
+        </div>
+      `;
+    }).join('');
+  }
+}
+renderSymptoms();
+
+// ===== 犬種選択の連動 =====
+document.getElementById('breedCategory').addEventListener('change', function() {
+  const select = document.getElementById('breed');
+  const cat = this.value;
+  if (!cat) {
+    select.innerHTML = '<option value="">先にサイズを選んでください</option>';
+    updateWeightHint();
+    return;
+  }
+  const list = breedsByCategory[cat] || [];
+  select.innerHTML = '<option value="">選んでください(任意)</option>' +
+    list.map(b => `<option value="${b}">${b}</option>`).join('');
+  updateWeightHint();
+});
+
+document.getElementById('breed').addEventListener('change', updateWeightHint);
+document.getElementById('weight').addEventListener('input', updateWeightHint);
+
+// ===== 体重ヒント表示・判定 =====
+function getWeightRange() {
+  const breed = document.getElementById('breed').value;
+  const cat = document.getElementById('breedCategory').value;
+  if (breed && breedWeightRange[breed]) {
+    return {range: breedWeightRange[breed], source: breed};
+  }
+  if (cat && categoryWeightRange[cat]) {
+    const labels = {small: '小型犬', medium: '中型犬', large: '大型犬', brachy: '短頭種'};
+    return {range: categoryWeightRange[cat], source: labels[cat] + '一般'};
+  }
+  return null;
+}
+
+function assessWeight(weight, range) {
+  if (!weight || !range) return null;
+  const [min, max] = range;
+  // 個体差を考慮し、±15%まで「範囲内」、それ以上を逸脱とする
+  const lowerBound = min * 0.85;
+  const upperBound = max * 1.15;
+  if (weight < lowerBound) {
+    const pct = Math.round((1 - weight / min) * 100);
+    return {status: 'underweight', pct: pct, message: `標準下限の約${pct}%下回っています`};
+  }
+  if (weight > upperBound) {
+    const pct = Math.round((weight / max - 1) * 100);
+    return {status: 'overweight', pct: pct, message: `標準上限の約${pct}%上回っています`};
+  }
+  if (weight < min) return {status: 'low_normal', message: '標準範囲のやや下'};
+  if (weight > max) return {status: 'high_normal', message: '標準範囲のやや上'};
+  return {status: 'normal', message: '標準範囲内'};
+}
+
+function updateWeightHint() {
+  const hint = document.getElementById('weightHint');
+  const weight = parseFloat(document.getElementById('weight').value);
+  const info = getWeightRange();
+
+  if (!info) {
+    hint.innerHTML = '';
+    hint.className = 'weight-hint';
+    return;
+  }
+
+  const [min, max] = info.range;
+  const baseText = `${info.source}の標準体重: ${min}〜${max} kg(目安)`;
+
+  if (isNaN(weight) || weight <= 0) {
+    hint.innerHTML = baseText;
+    hint.className = 'weight-hint';
+    return;
+  }
+
+  const assess = assessWeight(weight, info.range);
+  if (!assess) {
+    hint.innerHTML = baseText;
+    hint.className = 'weight-hint';
+    return;
+  }
+
+  let icon = '', cls = 'weight-hint';
+  if (assess.status === 'underweight') { icon = '⚠ '; cls = 'weight-hint alert'; }
+  else if (assess.status === 'overweight') { icon = '⚠ '; cls = 'weight-hint alert'; }
+  else if (assess.status === 'low_normal' || assess.status === 'high_normal') {
+    icon = '・'; cls = 'weight-hint warn';
+  }
+  else { icon = '✓ '; cls = 'weight-hint'; }
+
+  hint.innerHTML = `${baseText}<br>${icon}入力された体重: ${assess.message}`;
+  hint.className = cls;
+}
+
+// ===== 判定ロジック =====
+function checkSymptoms() {
+  const checked = Array.from(document.querySelectorAll('#step2 input:checked'));
+  if (checked.length === 0) {
+    alert('当てはまる症状を1つ以上選んでください。');
+    return;
+  }
+
+  // 緊急度判定
+  const hasEmergency = checked.some(i => i.dataset.level === 'emergency');
+  const urgentCount = checked.filter(i => i.dataset.level === 'urgent').length;
+  let urgency;
+  if (hasEmergency) urgency = 'emergency';
+  else if (urgentCount >= 1) urgency = 'urgent';
+  else urgency = 'routine';
+
+  renderUrgency(urgency);
+
+  // 関連カテゴリ
+  const systems = [...new Set(checked.map(i => i.dataset.system))];
+  renderCategories(systems, checked);
+
+  // 犬種固有の注意
+  renderBreedNotes();
+
+  // 表示
+  const result = document.getElementById('result');
+  result.classList.add('show');
+  result.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+function renderUrgency(level) {
+  const area = document.getElementById('urgencyArea');
+  const conf = {
+    emergency: {
+      icon: '🚨',
+      title: '今すぐ動物病院へ',
+      desc: '緊急性の高い症状が含まれています。<br>夜間・休日でも、夜間救急動物病院または最寄りのかかりつけ病院に今すぐ連絡してください。<br>移動中も呼吸や意識の状態に注意してください。'
+    },
+    urgent: {
+      icon: '⚠️',
+      title: '24時間以内に受診を',
+      desc: '様子を見るより、できるだけ早く獣医師に診てもらうことをおすすめします。<br>悪化のサインが出たらすぐに病院へ連絡してください。'
+    },
+    routine: {
+      icon: '🟢',
+      title: '経過観察 / 念のため受診検討',
+      desc: '今すぐ緊急性は低い可能性がありますが、症状が続く・悪化する場合は受診してください。<br>1〜2日経っても改善しない場合は、念のため病院へ。'
+    }
+  };
+  const c = conf[level];
+  area.innerHTML = `
+    <div class="urgency ${level}">
+      <div class="urgency-icon">${c.icon}</div>
+      <div class="urgency-title">${c.title}</div>
+      <div class="urgency-desc">${c.desc}</div>
+    </div>
+  `;
+}
+
+function renderCategories(systems, checked) {
+  // 各systemに対応するカテゴリ説明
+  const systemMap = {
+    digestive: {title: '消化器系の不調', desc: '胃腸炎、膵炎、誤飲・異物、寄生虫、食物アレルギーなどが関わる可能性があります。'},
+    respiratory: {title: '呼吸器系の不調', desc: 'ケンネルコフ(感染性気管気管支炎)、気管虚脱、肺炎、心臓由来の咳などが関わる可能性があります。'},
+    general: {title: '全身状態の変化', desc: '感染症、貧血、代謝の問題など、原因は多岐にわたります。獣医師の診察と血液検査が役立ちます。'},
+    neuro: {title: '神経系の異常', desc: 'てんかん、脳の疾患、椎間板ヘルニアなど、神経系の問題が関わっている可能性があります。'},
+    skin: {title: '皮膚の問題', desc: 'アトピー性皮膚炎、ノミ・ダニ・疥癬、細菌・真菌感染、食物アレルギーなどが関わる可能性があります。'},
+    eyes: {title: '目の不調', desc: '結膜炎、角膜の傷、ドライアイ、緑内障など。目は急速に悪化することがあるため注意が必要です。'},
+    ears: {title: '耳の不調', desc: '外耳炎、耳ダニ、耳の感染症などが考えられます。垂れ耳の犬種は特に発症しやすいです。'},
+    dental: {title: '口・歯の不調', desc: '歯周病、歯石、口内炎などが考えられます。口臭の強さは歯周病の重要なサインです。'},
+    endocrine: {title: '内分泌・代謝の異常', desc: '糖尿病、クッシング症候群、甲状腺機能の異常などが関わる可能性があります。血液検査での確認が重要です。'},
+    urinary: {title: '泌尿器系の不調', desc: '膀胱炎、尿路結石、腎臓病、前立腺の問題などが関わる可能性があります。'},
+    liver: {title: '肝臓の問題', desc: '黄疸は肝臓・胆嚢の問題のサインです。早急な血液検査が必要です。'},
+    circulatory: {title: '循環器・血液の問題', desc: '貧血、ショック状態、心臓病などの可能性があります。緊急対応が必要です。'},
+    orthopedic: {title: '足・関節・骨の問題', desc: '膝蓋骨脱臼、股関節形成不全、椎間板ヘルニア、靭帯損傷などが考えられます。'}
+  };
+
+  const checkedSymptoms = checked.map(c => c.dataset.label);
+  const cats = systems.filter(s => systemMap[s]).map(s => systemMap[s]);
+
+  document.getElementById('categoryArea').innerHTML = `
+    <div class="result-block">
+      <h3>選択された症状</h3>
+      <ul>
+        ${checkedSymptoms.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+    <div class="result-block">
+      <h3>動物病院で相談する際のポイント</h3>
+      <p style="font-size:13px; color: var(--ink-soft); margin-bottom:12px;">以下のような領域に関わる可能性があります(あくまで一般情報で、診断ではありません):</p>
+      <ul>
+        ${cats.map(c => `<li><strong>${c.title}</strong> — ${c.desc}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+function renderBreedNotes() {
+  const cat = document.getElementById('breedCategory').value;
+  const breed = document.getElementById('breed').value;
+  const age = parseInt(document.getElementById('age').value, 10);
+  const weight = parseFloat(document.getElementById('weight').value);
+  const notes = [];
+
+  // 体重評価
+  const wInfo = getWeightRange();
+  if (!isNaN(weight) && weight > 0 && wInfo) {
+    const assess = assessWeight(weight, wInfo.range);
+    if (assess) {
+      const [min, max] = wInfo.range;
+      if (assess.status === 'underweight') {
+        notes.push(`<strong>体重について:</strong> 入力された体重 ${weight}kg は ${wInfo.source} の標準範囲(${min}〜${max}kg)を約${assess.pct}%下回っています。痩せすぎの場合、食事量・吸収不良・寄生虫・消化器疾患・内分泌疾患などが背景にある可能性があります。獣医師にご相談ください。`);
+      } else if (assess.status === 'overweight') {
+        notes.push(`<strong>体重について:</strong> 入力された体重 ${weight}kg は ${wInfo.source} の標準範囲(${min}〜${max}kg)を約${assess.pct}%上回っています。肥満は関節疾患・心臓病・糖尿病・呼吸器疾患のリスクを高めます。短頭種は特に呼吸困難につながりやすいため、食事と運動の見直しを獣医師と相談してください。`);
+      } else if (assess.status === 'low_normal' || assess.status === 'high_normal') {
+        notes.push(`<strong>体重について:</strong> ${wInfo.source} の標準範囲(${min}〜${max}kg)の${assess.status === 'low_normal' ? '下限付近' : '上限付近'}です。個体差の範囲内ですが、最近急激な変化があった場合は獣医師にご相談ください。`);
+      }
+    }
+  }
+
+  if (cat === 'small') {
+    notes.push('<strong>小型犬で注意したいこと:</strong> 低血糖になりやすい(特に若齢)、気管虚脱(咳・呼吸異常)、膝蓋骨脱臼(足を上げる・スキップする歩行)が比較的多くみられます。');
+  }
+  if (cat === 'large') {
+    notes.push('<strong>大型犬で注意したいこと:</strong> 胃捻転(食後の運動・お腹の膨れに注意)、股関節形成不全、骨肉腫など、大型犬特有の疾患があります。');
+  }
+  if (cat === 'brachy') {
+    notes.push('<strong>短頭種で特に注意したいこと:</strong> 呼吸器が弱く、暑さ・興奮・運動で呼吸困難を起こしやすいです。熱中症のリスクが他の犬種より高く、呼吸の異常は緊急性が高いと考えてください。');
+  }
+  if (breed === '柴犬') {
+    notes.push('<strong>柴犬で比較的多い疾患:</strong> アトピー性皮膚炎、緑内障、認知症(高齢期)。');
+  }
+  if (breed === 'チワワ') {
+    notes.push('<strong>チワワで比較的多い疾患:</strong> 水頭症、僧帽弁閉鎖不全症、低血糖、膝蓋骨脱臼、気管虚脱。震えはストレスや寒さでも起きますが、長く続く場合は要注意。');
+  }
+  if (breed === 'トイプードル' || breed === 'ミニチュアダックスフンド') {
+    notes.push(`<strong>${breed}で比較的多い疾患:</strong> ${breed === 'トイプードル' ? '膝蓋骨脱臼、流涙症、てんかん。' : '椎間板ヘルニア(段差・飛び降りに注意)、肥満が誘因になることが多いです。'}`);
+  }
+  if (breed === 'ゴールデンレトリバー' || breed === 'ラブラドールレトリバー') {
+    notes.push('<strong>大型レトリバー系で比較的多い疾患:</strong> 股関節形成不全、悪性リンパ腫、肥満、外耳炎(垂れ耳のため)。');
+  }
+  if (!isNaN(age) && age >= 7) {
+    notes.push('<strong>シニア期(7歳〜)で注意したいこと:</strong> この年齢からは腫瘍、心臓病、腎臓病、関節疾患のリスクが上がります。「いつもと違う」変化を感じたら、早めの受診をおすすめします。');
+  }
+  if (!isNaN(age) && age <= 1) {
+    notes.push('<strong>子犬期で注意したいこと:</strong> ワクチン未完了の場合は感染症リスクが高く、嘔吐・下痢・元気消失は急速に悪化することがあります。半日以上続く場合はすぐに受診を。');
+  }
+
+  const area = document.getElementById('breedArea');
+  if (notes.length === 0) {
+    area.innerHTML = '';
+    return;
+  }
+  area.innerHTML = `
+    <div class="result-block">
+      <h3>犬種・年齢・体重から見た注意点</h3>
+      ${notes.map(n => `<div class="breed-warning">${n}</div>`).join('')}
+    </div>
+  `;
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById('breedCategory').value = '';
+  document.getElementById('breed').innerHTML = '<option value="">先にサイズを選んでください</option>';
+  document.getElementById('age').value = '';
+  document.getElementById('weight').value = '';
+  document.getElementById('weightHint').innerHTML = '';
+  document.getElementById('weightHint').className = 'weight-hint';
+  document.getElementById('result').classList.remove('show');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
